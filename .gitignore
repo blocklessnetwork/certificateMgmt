@@ -1,0 +1,9 @@
+/certificatemgmt
+bin/
+*.exe
+*.test
+*.out
+vendor/
+.idea/
+.env
+*.local
