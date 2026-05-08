@@ -6,10 +6,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// CollectionAccountAssigned 对应 MongoDB 集合 accountAssigned。
+// CollectionAccountAssigned is the MongoDB collection name for assignments.
 const CollectionAccountAssigned = "accountAssigned"
 
-// AccountAssigned 对应文档: {"uuid": String, "account": String, "createTime": Date}。
+// AccountAssigned binds a uuid to an account with a createTime (BSON date).
 type AccountAssigned struct {
 	ID         primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
 	UUID       string             `bson:"uuid" json:"uuid"`

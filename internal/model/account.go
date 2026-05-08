@@ -2,10 +2,10 @@ package model
 
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
-// CollectionAccounts 对应 MongoDB 集合 accounts。
+// CollectionAccounts is the MongoDB collection name for accounts.
 const CollectionAccounts = "accounts"
 
-// Account 对应文档: {"account": String, "password": String, "twoFASec": String}。
+// Account is a document with optional _id plus account, password, and twoFASec.
 type Account struct {
 	ID       primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
 	Account  string             `bson:"account" json:"account"`

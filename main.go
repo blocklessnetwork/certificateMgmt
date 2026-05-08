@@ -15,6 +15,7 @@ import (
 
 	"certificatemgmt/internal/assign"
 	"certificatemgmt/internal/config"
+	"certificatemgmt/internal/middleware"
 	"certificatemgmt/internal/store"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -55,7 +56,7 @@ func main() {
 
 	srv := &http.Server{
 		Addr:              cfg.HTTPAddr,
-		Handler:           mux,
+		Handler:           middleware.RequestLog(mux),
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       60 * time.Second,
 		WriteTimeout:      60 * time.Second,
@@ -131,6 +132,14 @@ func registerRoutes(mux *http.ServeMux, db *mongo.Database) {
 		}
 		if errors.Is(err, assign.ErrNoAccountAvailable) {
 			writeJSON(w, http.StatusServiceUnavailable, map[string]string{"error": err.Error()})
+			return
+		}
+		if errors.Is(err, assign.ErrNoAssignableAccounts) {
+			writeJSON(w, http.StatusServiceUnavailable, map[string]string{"error": err.Error()})
+			return
+		}
+		if errors.Is(err, assign.ErrAssignedAccountMissing) {
+			writeJSON(w, http.StatusConflict, map[string]string{"error": err.Error()})
 			return
 		}
 		if err != nil {
